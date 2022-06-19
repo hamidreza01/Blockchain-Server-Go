@@ -44,21 +44,23 @@ func Start(pull NodesPull, serverIp string, nodeServerPort string) func(w http.R
 			w.Write([]byte("ok"))
 		}()
 		// add node
-		if r.URL.Path == "/addMe" {
-			body, err := io.ReadAll(r.Body)
-			logFunc(r, body)
-			errorCheck(err, 1)
-			var bodyJSON map[string]interface{}
-			err = json.Unmarshal(body, &bodyJSON)
-			errorCheck(err, 1)
-			nodeData := bodyJSON["data"].(map[string]interface{})
-			ip := strings.Split(r.RemoteAddr, ":")[0]
-			nodePort := nodeData["port"].(float64)
-			rootPort := nodeData["port"].(float64)
-			hash := nodeData["hash"].(string)
-			// sendData `nodes` and `chain
-			SendAllData(pull, ip+":"+fmt.Sprintf("%.0f", rootPort), hash, serverIp, nodeServerPort)
-			pull.nodes = append(pull.nodes, nodes{hash: hash, ip: ip, port: rootPort, nodePort: nodePort})
+		if r.Method == "POST" && r.Body != nil {
+			if r.URL.Path == "/addMe" {
+				body, err := io.ReadAll(r.Body)
+				logFunc(r, body)
+				errorCheck(err, 1)
+				var bodyJSON map[string]interface{}
+				err = json.Unmarshal(body, &bodyJSON)
+				errorCheck(err, 1)
+				nodeData := bodyJSON["data"].(map[string]interface{})
+				ip := strings.Split(r.RemoteAddr, ":")[0]
+				nodePort := nodeData["port"].(float64)
+				rootPort := nodeData["port"].(float64)
+				hash := nodeData["hash"].(string)
+				// sendData `nodes` and `chain
+				SendAllData(pull, ip+":"+fmt.Sprintf("%.0f", rootPort), hash, serverIp, nodeServerPort)
+				pull.nodes = append(pull.nodes, nodes{hash: hash, ip: ip, port: rootPort, nodePort: nodePort})
+			}
 		}
 
 	}

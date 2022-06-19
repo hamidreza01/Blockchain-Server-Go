@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/Developix-ir/Developix-Blockchain-Server/blockchain"
 	"github.com/Developix-ir/Developix-Blockchain-Server/network"
 )
 
@@ -20,9 +21,13 @@ func errorCheck(err error, t int) {
 func main() {
 	var pull network.NodesPull
 	rootServer := http.NewServeMux()
-	// nodeServer := http.NewServeMux()
+	nodeServer := http.NewServeMux()
 	rootServer.HandleFunc("/", network.Start(pull, CONFIG.ip, CONFIG.nodePort))
-	println(CONFIG.ip + CONFIG.port)
+	nodeServer.HandleFunc("/", blockchain.Start())
+	go func() {
+		err := http.ListenAndServe(CONFIG.ip+CONFIG.nodePort, nodeServer)
+		errorCheck(err, 2)
+	}()
 	err := http.ListenAndServe(CONFIG.ip+CONFIG.port, rootServer)
 	errorCheck(err, 2)
 }
