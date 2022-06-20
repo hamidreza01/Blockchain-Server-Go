@@ -14,11 +14,13 @@ var CONFIG _CONFIG = _CONFIG{
 	rewardValue:        10,
 	reward:             struct{ address string }{address: "**DPX Blockchain**"},
 	genesis: Block{
-		hash:       "DEFAULT-DPX-GENESIS-HASH",
-		lastHash:   "DEFAULT-DPX-LAST-HASH",
-		nonce:      0,
-		difficulty: _DEFUALT_DIFFICULTY,
-		timestamp:  0,
-		data:       struct{ Transaction []Transaction }{},
+		Hash:       "DEFAULT-DPX-GENESIS-HASH",
+		LastHash:   "DEFAULT-DPX-LAST-HASH",
+		Nonce:      0,
+		Difficulty: _DEFUALT_DIFFICULTY,
+		Timestamp:  0,
+		Data: struct {
+			Transaction []Transaction `json:"transaction"`
+		}{},
 	},
 }
