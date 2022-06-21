@@ -20,7 +20,7 @@ var CONFIG _CONFIG = _CONFIG{
 		Difficulty: _DEFUALT_DIFFICULTY,
 		Timestamp:  0,
 		Data: struct {
-			Transaction []Transaction `json:"transaction"`
+			Transaction *[]Transaction `json:"transaction"`
 		}{},
 	},
 }

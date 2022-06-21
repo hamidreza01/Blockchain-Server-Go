@@ -22,8 +22,8 @@ func main() {
 	var pull network.NodesPull
 	rootServer := http.NewServeMux()
 	nodeServer := http.NewServeMux()
-	rootServer.HandleFunc("/", network.Start(pull, CONFIG.ip, CONFIG.nodePort))
-	nodeServer.HandleFunc("/", blockchain.Start())
+	rootServer.HandleFunc("/", network.Start(&pull, CONFIG.ip, CONFIG.nodePort))
+	nodeServer.HandleFunc("/", blockchain.Start(&pull))
 	go func() {
 		err := http.ListenAndServe(CONFIG.ip+CONFIG.nodePort, nodeServer)
 		errorCheck(err, 2)

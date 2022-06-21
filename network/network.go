@@ -22,7 +22,7 @@ func logFunc(r *http.Request, body []byte) {
 	fmt.Printf("ip: %s\npath: %s\nmethod: %s\nbody: %s\n", r.RemoteAddr, r.URL.Path, r.Method, string(body))
 }
 
-func SendAllData(pull NodesPull, url string, hash string, serverIp string, nodePort string) {
+func SendAllData(pull *NodesPull, url string, hash string, serverIp string, nodePort string) {
 	nodes := pull.getNodes(serverIp, nodePort)
 	// chain := blockchain.getChain()
 	data, err := json.Marshal(
@@ -35,7 +35,7 @@ func SendAllData(pull NodesPull, url string, hash string, serverIp string, nodeP
 	pull.brodcastAnode(url, "welcome", data)
 }
 
-func Start(pull NodesPull, serverIp string, nodeServerPort string) func(w http.ResponseWriter, r *http.Request) {
+func Start(pull *NodesPull, serverIp string, nodeServerPort string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := r.Body.Close(); err != nil {
@@ -59,7 +59,19 @@ func Start(pull NodesPull, serverIp string, nodeServerPort string) func(w http.R
 				hash := nodeData["hash"].(string)
 				// sendData `nodes` and `chain
 				SendAllData(pull, ip+":"+fmt.Sprintf("%.0f", rootPort), hash, serverIp, nodeServerPort)
-				pull.nodes = append(pull.nodes, nodes{hash: hash, ip: ip, port: rootPort, nodePort: nodePort})
+				*pull.Nodes = append(*pull.Nodes, Nodes{Hash: &hash, Ip: &ip, Port: &rootPort, NodePort: &nodePort})
+			} else {
+				var validNode bool
+				nodeIp := strings.Split(r.RemoteAddr, ":")[0]
+				for _, v := range *pull.Nodes {
+					if *v.Ip == nodeIp {
+						validNode = true
+						break
+					}
+				}
+				if validNode {
+
+				}
 			}
 		}
 
