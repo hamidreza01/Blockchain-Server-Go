@@ -12,8 +12,8 @@ import (
 	"github.com/Developix-ir/Developix-Blockchain-Server/src/network"
 )
 
-func StartBlockchain(pull *network.NodesPull, bl *blockchain.Blockchain) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
+func StartBlockchain(pull /*s*/ network.NodesPull, bl /*s*/ blockchain.Blockchain) func(w http.ResponseWriter, r /*s*/ *http.Request) {
+	return func(w http.ResponseWriter, r /*s*/ *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
 				fmt.Println(err)
@@ -27,11 +27,11 @@ func StartBlockchain(pull *network.NodesPull, bl *blockchain.Blockchain) func(w 
 		}()
 		body, err := io.ReadAll(r.Body)
 		addon.ErrorCheck(err, 1)
-		addon.LogFunc(r, body)
+		addon.LogFunc(*r, body)
 		if r.Method == "POST" && r.Body != nil {
 			var validNode bool
 			nodeIp := strings.Split(r.RemoteAddr, ":")[0]
-			for _, v := range pull.Nodes {
+			for _, v := range /*s*/ pull.Nodes {
 				if v.Ip == nodeIp {
 					validNode = true
 					break

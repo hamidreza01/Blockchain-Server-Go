@@ -12,7 +12,7 @@ type Blockchain struct {
 	TransactionPull []Transaction
 }
 
-func (b *Blockchain) ClearTransaction(chain []Block) {
+func (b /*s*/ Blockchain) ClearTransaction(chain []Block) {
 	var cleanTx []Transaction
 	for _, v := range b.TransactionPull {
 		has := false
@@ -20,7 +20,7 @@ func (b *Blockchain) ClearTransaction(chain []Block) {
 			if has {
 				break
 			}
-			for _, v3 := range *v2.Data.Transaction {
+			for _, v3 := range /*s*/ v2.Data.Transaction {
 				if v3.Id == v.Id {
 					has = true
 					break
@@ -34,8 +34,8 @@ func (b *Blockchain) ClearTransaction(chain []Block) {
 	b.TransactionPull = cleanTx
 }
 
-func (b *Blockchain) IsValid(chain []Block) bool {
-	if chain[0].Difficulty != CONFIG.genesis.Difficulty && chain[0].Hash != CONFIG.genesis.Hash && chain[0].LastHash != CONFIG.genesis.LastHash && chain[0].Nonce != CONFIG.genesis.Nonce && chain[0].Timestamp != CONFIG.genesis.Timestamp && len(*chain[0].Data.Transaction) != 0 {
+func (b /*s*/ Blockchain) IsValid(chain []Block) bool {
+	if chain[0].Difficulty != CONFIG.genesis.Difficulty && chain[0].Hash != CONFIG.genesis.Hash && chain[0].LastHash != CONFIG.genesis.LastHash && chain[0].Nonce != CONFIG.genesis.Nonce && chain[0].Timestamp != CONFIG.genesis.Timestamp && len( /*s*/ chain[0].Data.Transaction) != 0 {
 		fmt.Printf("%s\n", "invalid genesis block")
 		return false
 	}
@@ -68,11 +68,11 @@ func (b *Blockchain) IsValid(chain []Block) bool {
 
 func (_ Blockchain) ValidTransactionData(chain []Block) bool {
 	for i := 1; i < len(chain); i++ {
-		if len(*chain[i].Data.Transaction) < 1 {
+		if len( /*s*/ chain[i].Data.Transaction) < 1 {
 			fmt.Printf("%s\n", "invalid transaction data")
 			return false
 		}
-		for _, transaction := range *chain[i].Data.Transaction {
+		for _, transaction := range /*s*/ chain[i].Data.Transaction {
 			rewardNumber := 0
 			if transaction.InputMap.Address == CONFIG.reward.address {
 				rewardNumber++

@@ -7,7 +7,7 @@ type Config struct {
 }
 
 var CONFIG Config = Config{
-	port:     ":1000",
-	nodePort: ":998",
-	ip:       "127.0.0.1",
+	port:     ":1002",
+	nodePort: ":1000",
+	ip:       "0.0.0.0",
 }

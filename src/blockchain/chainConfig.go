@@ -12,7 +12,7 @@ type _CONFIG struct {
 var CONFIG _CONFIG = _CONFIG{
 	DEFUALT_DIFFICULTY: 10,
 	rewardValue:        10,
-	reward:             struct{ address string }{address: "**DPX Blockchain**"},
+	reward:             struct{ address string }{address: "/*s*//*s*/DPX Blockchain/*s*//*s*/"},
 	genesis: Block{
 		Hash:       "DEFAULT-DPX-GENESIS-HASH",
 		LastHash:   "DEFAULT-DPX-LAST-HASH",
@@ -20,7 +20,7 @@ var CONFIG _CONFIG = _CONFIG{
 		Difficulty: _DEFUALT_DIFFICULTY,
 		Timestamp:  0,
 		Data: struct {
-			Transaction *[]Transaction `json:"transaction"`
+			Transaction /*s*/ []Transaction `json:"transaction"`
 		}{},
 	},
 }

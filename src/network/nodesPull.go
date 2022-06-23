@@ -19,11 +19,11 @@ type Nodes struct {
 type data interface{}
 
 type NodesPull struct {
-	Nodes []Nodes
+	Nodes /*s*/ []Nodes
 }
 
-func (n *NodesPull) Brodcast(channel string, da data) {
-	for _, v := range n.Nodes {
+func (n /*s*/ NodesPull) Brodcast(channel string, da data) {
+	for _, v := range /*s*/ n.Nodes {
 		sendingData := make(map[string]interface{})
 		sendingData["data"] = da
 		sendingData["data"].(map[string]interface{})["hash"] = v.Hash
@@ -43,11 +43,15 @@ func (n NodesPull) BrodcastAnode(url string, channel string, da data) {
 	addon.ErrorCheck(err, 1)
 }
 
-func (n *NodesPull) GetNodes(ip string, nodeServerPort string) []string {
+func (n /*s*/ NodesPull) GetNodes(ip string, nodeServerPort string) []string {
 	var sendingData []string
 	sendingData = append(sendingData, ip+nodeServerPort)
-	for _, v := range n.Nodes {
+	for _, v := range /*s*/ n.Nodes {
 		sendingData = append(sendingData, v.Ip+":"+fmt.Sprintf("%.0f", v.NodePort))
 	}
 	return sendingData
+}
+
+func (n *NodesPull) SliceChain(number int) {
+	n.Brodcast("sliceChain", number)
 }
