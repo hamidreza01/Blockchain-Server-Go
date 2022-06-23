@@ -1,33 +1,25 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
-	"github.com/Developix-ir/Developix-Blockchain-Server/blockchain"
-	"github.com/Developix-ir/Developix-Blockchain-Server/network"
+	ErR "github.com/Developix-ir/Developix-Blockchain-Server/addon"
+	"github.com/Developix-ir/Developix-Blockchain-Server/index"
+	"github.com/Developix-ir/Developix-Blockchain-Server/src/blockchain"
+	"github.com/Developix-ir/Developix-Blockchain-Server/src/network"
 )
 
-func errorCheck(err error, t int) {
-	if err != nil {
-		if t == 1 {
-			log.Println(err)
-		} else if t == 2 {
-			log.Fatalln(err)
-		}
-	}
-}
-
 func main() {
-	var pull network.NodesPull
+	var pull *network.NodesPull
+	var blockchainApp *blockchain.Blockchain
 	rootServer := http.NewServeMux()
 	nodeServer := http.NewServeMux()
-	rootServer.HandleFunc("/", network.Start(&pull, CONFIG.ip, CONFIG.nodePort))
-	nodeServer.HandleFunc("/", blockchain.Start(&pull))
+	rootServer.HandleFunc("/", index.StartNode(pull, blockchainApp, CONFIG.ip, CONFIG.nodePort))
+	nodeServer.HandleFunc("/", index.StartBlockchain(pull, blockchainApp))
 	go func() {
 		err := http.ListenAndServe(CONFIG.ip+CONFIG.nodePort, nodeServer)
-		errorCheck(err, 2)
+		ErR.ErrorCheck(err, 2)
 	}()
 	err := http.ListenAndServe(CONFIG.ip+CONFIG.port, rootServer)
-	errorCheck(err, 2)
+	ErR.ErrorCheck(err, 2)
 }
